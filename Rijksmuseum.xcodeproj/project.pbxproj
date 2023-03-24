@@ -10,7 +10,6 @@
 		3C5E2FA229CDF0F000E46127 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5E2FA129CDF0F000E46127 /* AppDelegate.swift */; };
 		3C5E2FA429CDF0F000E46127 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5E2FA329CDF0F000E46127 /* SceneDelegate.swift */; };
 		3C5E2FA629CDF0F000E46127 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5E2FA529CDF0F000E46127 /* ViewController.swift */; };
-		3C5E2FA929CDF0F000E46127 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C5E2FA729CDF0F000E46127 /* Main.storyboard */; };
 		3C5E2FAB29CDF0F100E46127 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5E2FAA29CDF0F100E46127 /* Assets.xcassets */; };
 		3C5E2FAE29CDF0F100E46127 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C5E2FAC29CDF0F100E46127 /* LaunchScreen.storyboard */; };
 		3C5E2FB929CDF0F100E46127 /* RijksmuseumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5E2FB829CDF0F100E46127 /* RijksmuseumTests.swift */; };
@@ -38,7 +37,6 @@
 		3C5E2FA129CDF0F000E46127 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C5E2FA329CDF0F000E46127 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3C5E2FA529CDF0F000E46127 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3C5E2FA829CDF0F000E46127 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3C5E2FAA29CDF0F100E46127 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C5E2FAD29CDF0F100E46127 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3C5E2FAF29CDF0F100E46127 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,7 +95,6 @@
 				3C5E2FA129CDF0F000E46127 /* AppDelegate.swift */,
 				3C5E2FA329CDF0F000E46127 /* SceneDelegate.swift */,
 				3C5E2FA529CDF0F000E46127 /* ViewController.swift */,
-				3C5E2FA729CDF0F000E46127 /* Main.storyboard */,
 				3C5E2FAA29CDF0F100E46127 /* Assets.xcassets */,
 				3C5E2FAC29CDF0F100E46127 /* LaunchScreen.storyboard */,
 				3C5E2FAF29CDF0F100E46127 /* Info.plist */,
@@ -227,7 +224,6 @@
 			files = (
 				3C5E2FAE29CDF0F100E46127 /* LaunchScreen.storyboard in Resources */,
 				3C5E2FAB29CDF0F100E46127 /* Assets.xcassets in Resources */,
-				3C5E2FA929CDF0F000E46127 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,14 +285,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3C5E2FA729CDF0F000E46127 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3C5E2FA829CDF0F000E46127 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3C5E2FAC29CDF0F100E46127 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -434,7 +422,6 @@
 				INFOPLIST_FILE = Rijksmuseum/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -462,7 +449,6 @@
 				INFOPLIST_FILE = Rijksmuseum/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
