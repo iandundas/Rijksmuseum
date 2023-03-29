@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Shared
 
 public final class DetailViewController: UIViewController {
     
@@ -14,10 +15,6 @@ public final class DetailViewController: UIViewController {
     typealias CellRegistration = UICollectionView.CellRegistration<Cell, DetailRow>
 
     fileprivate let collectionView = {
-        
-        // TODO: https://www.kodeco.com/5436806-modern-collection-views-with-compositional-layouts ?
-        // TODO: https://www.swiftbysundell.com/articles/building-modern-collection-views-in-swift/
-
         let layout = UICollectionViewCompositionalLayout.list(
             using: UICollectionLayoutListConfiguration(
                 appearance: .plain
@@ -28,17 +25,6 @@ public final class DetailViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-//    fileprivate let loadingView: UIView = {
-//        let view = UIView()
-//
-//        let spinner = UIActivityIndicatorView(style: .large)
-//        spinner.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(spinner)
-//        spinner.centerWithin(containingView: view)
-//
-//        return view
-//    }()
     
     fileprivate func makeCellRegistration() -> CellRegistration {
         CellRegistration { [viewModel] cell, indexPath, item in
@@ -83,6 +69,8 @@ public final class DetailViewController: UIViewController {
     }
     
     private var lastLoadedCancellable: AnyCancellable?
+    private var isLoadingCancellable: AnyCancellable?
+    
     private func setupBindings() {
         
         lastLoadedCancellable = viewModel.items.sink { [weak self] (values: [DetailRow]?) in
@@ -103,6 +91,12 @@ public final class DetailViewController: UIViewController {
                 guard let self else { return }
                 self.presentAlert(alertInfo: errorAlert)
             }
+        
+        isLoadingCancellable = viewModel.isLoading
+            .sink(receiveValue: { [weak self] isLoading in
+                guard let self else { return }
+                self.navigationItem.rightBarButtonItem = isLoading ? ActivityIndicatorBarButtonItem() : nil
+            })
     }
     
     private func setupCollectionView() {

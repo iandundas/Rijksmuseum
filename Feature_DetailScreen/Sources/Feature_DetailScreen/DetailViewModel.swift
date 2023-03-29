@@ -15,6 +15,7 @@ public protocol DetailViewModelDelegate: AnyObject {
     func userWantsMoreToSearchFor(query: String)
 }
 
+@MainActor
 public final class DetailViewModel {
     
     enum ErrorAlert {
@@ -25,6 +26,7 @@ public final class DetailViewModel {
     
     let items = CurrentValueSubject<[DetailRow]?, Never>(nil)
     let errorAlerts = CurrentValueSubject<ErrorAlert?, Never>(nil) // TODO: model as a PassthroughSubject instead, as it's an event rather than a static value.
+    let isLoading = CurrentValueSubject<Bool, Never>(false)
 
     private var networkTask: Task<Void, Never>?
     private var fetchCollectionDetailsService: FetchCollectionDetailsService
@@ -37,14 +39,17 @@ public final class DetailViewModel {
     
     private func load() {
         networkTask?.cancel()
+        isLoading.value = true
         
         networkTask = Task {
             do {
                 let networkObject = try await fetchCollectionDetailsService.load()
                 self.handleNetworkResponse(networkObject: networkObject)
+                self.isLoading.value = false
             }
             catch let error {
                 self.handleNetworkError(error: error)
+                self.isLoading.value = false
             }
         }
     }
