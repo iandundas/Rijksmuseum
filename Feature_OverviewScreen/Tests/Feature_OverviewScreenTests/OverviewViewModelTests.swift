@@ -1,5 +1,6 @@
 import XCTest
 import Nimble
+import Transport
 @testable import Feature_OverviewScreen
 
 @MainActor
@@ -14,11 +15,11 @@ final class OverviewViewModelTests: XCTestCase {
         fakeCoordinator = OverviewViewModelDelegateSpy()
     }
     
-    func test_initialLoad() async throws {
+    func test_initialLoad() async {
         
         // Arrange
         let query: String? = nil
-        let successNetworkService = FetchCollectionServiceFakeSuccessSpy(loadResponse: [.stub1])
+        let successNetworkService = FetchCollectionServiceFakeSpy(loadResponse: [.stub1])
         
         // Act
         sut = OverviewViewModel(initialQuery: query, fetchCollectionService: successNetworkService)
@@ -38,10 +39,10 @@ final class OverviewViewModelTests: XCTestCase {
         await expect(self.sut.itemUpdates.value).toEventually(equal(expectedValue))
     }
     
-    func test_initialLoadWithGivenQuery() async throws {
+    func test_initialLoadWithGivenQuery() async {
         // Arrange
         let query: String? = "hello"
-        let successNetworkService = FetchCollectionServiceFakeSuccessSpy(loadResponse: [.stub1])
+        let successNetworkService = FetchCollectionServiceFakeSpy(loadResponse: [.stub1])
         
         // Act
         sut = OverviewViewModel(initialQuery: query, fetchCollectionService: successNetworkService)
@@ -54,10 +55,10 @@ final class OverviewViewModelTests: XCTestCase {
         await expect(successNetworkService.invokedLoadParameters).toEventually(equal((query, 1)))
     }
     
-    func test_canLoadMoreDataUntilEmptyResponseReceived() async throws {
+    func test_canLoadMoreDataUntilEmptyResponseReceived() async {
         // Arrange
         let query: String? = "hello"
-        let successNetworkService = FetchCollectionServiceFakeSuccessSpy(loadResponse: [.stub1])
+        let successNetworkService = FetchCollectionServiceFakeSpy(loadResponse: [.stub1])
         
         sut = OverviewViewModel(initialQuery: query, fetchCollectionService: successNetworkService)
         await expect(successNetworkService.invokedLoadCount).toEventually(equal(1))
@@ -78,14 +79,14 @@ final class OverviewViewModelTests: XCTestCase {
         await expect(successNetworkService.invokedLoadCount).toEventually(equal(2))
     }
     
-    func test_loadingMoreDataAppendsRatherThanInserts() async throws {
+    func test_loadingMoreDataAppendsRatherThanInserts() async {
         
         // First update from ViewModel is an `.overwrite` event (tested above)
         // But the next page should be `.append`:
         
         // Arrange
         let query: String? = "hello"
-        let successNetworkService = FetchCollectionServiceFakeSuccessSpy(loadResponse: [.stub1])
+        let successNetworkService = FetchCollectionServiceFakeSpy(loadResponse: [.stub1])
         sut = OverviewViewModel(initialQuery: query, fetchCollectionService: successNetworkService)
 
         // Act
@@ -99,13 +100,13 @@ final class OverviewViewModelTests: XCTestCase {
         await expect(self.sut.itemUpdates.value).toEventually(equal(secondExpectedValue))
     }
     
-    func test_changingSearchQueryLoadsANewPage1AndOverwrites() async throws {
+    func test_changingSearchQueryLoadsANewPage1AndOverwrites() async {
         
         // If the search query is changed, paging should begin again at page 1.
         // It should also use `.overwrite` to update the ViewController:
         
         // Arrange
-        let successNetworkService = FetchCollectionServiceFakeSuccessSpy(loadResponse: [.stub1])
+        let successNetworkService = FetchCollectionServiceFakeSpy(loadResponse: [.stub1])
         sut = OverviewViewModel(initialQuery: "First query", fetchCollectionService: successNetworkService)
         await expect(self.sut.itemUpdates.value).toEventuallyNot(beNil()) // wait for the load to complete
         
@@ -128,7 +129,7 @@ final class OverviewViewModelTests: XCTestCase {
     
     func test_userCanRequestMoreInfoOnAnItem() async throws {
         // Arrange
-        let successNetworkService = FetchCollectionServiceFakeSuccessSpy(loadResponse: [.stub1])
+        let successNetworkService = FetchCollectionServiceFakeSpy(loadResponse: [.stub1])
         sut = OverviewViewModel(initialQuery: "First query", fetchCollectionService: successNetworkService)
         sut.delegate = fakeCoordinator
 
@@ -145,14 +146,71 @@ final class OverviewViewModelTests: XCTestCase {
         expect(self.fakeCoordinator.invokedUserWantsMoreInfoOnCount) == 1
         expect(self.fakeCoordinator.invokedUserWantsMoreInfoOnParameters?.objectNumber) == firstCollectionItem.objectNumber
     }
+    
+    func test_networkErrorTriggersAlert() async throws {
+        // Arrange
+        let networkService = FetchCollectionServiceFakeSpy(loadResponse: nil) // `nil` means `throw`
+        
+        // Act
+        sut = OverviewViewModel(initialQuery: "First query", fetchCollectionService: networkService)
+
+        // Assert
+        // wait for the load to complete
+        await expect(self.sut.errorAlerts.value).toEventuallyNot(beNil())
+        
+        let errorAlert = try XCTUnwrap(sut.errorAlerts.value)
+        guard case let .networkError(title, message, _) = errorAlert else {
+            fail("Encountered wrong enum case")
+            return
+        }
+        
+        expect(title) == "Error"
+        expect(message) == "Could not create a request to send to the network"
+    }
+    
+    func test_retryAfterNetworkError() async throws {
+        // Arrange
+        let query = "First query"
+        let networkService = FetchCollectionServiceFakeSpy(loadResponse: nil) // `nil` means `throw`
+        sut = OverviewViewModel(initialQuery: query, fetchCollectionService: networkService)
+
+        // wait for it to load the first error:
+        await expect(self.sut.errorAlerts.value).toEventuallyNot(beNil())
+        let errorAlert = try XCTUnwrap(sut.errorAlerts.value)
+        
+        // Fish around for the `retryHandler`:
+        guard case let .networkError(_, _, retryHandler) = errorAlert else {
+            fail("Encountered wrong enum case")
+            return
+        }
+        
+        // Network is working again!
+        networkService.loadResponse = [.stub1]
+        
+        // Act
+        retryHandler()
+
+        // Assert
+        // wait for the load to complete
+        await expect(networkService.invokedLoadCount).toEventually(equal(2)) // second attempt
+        await expect(networkService.invokedLoadParameters).toEventually(equal((query, 1))) // loading first page
+        
+        // Check the output of the ViewModel is correct after network load:
+        let expectedValue: (OverviewViewModel.StateChangeMode, [CollectionItem])? = (
+            .overwrite, [CollectionItem.from(artObject: .stub1)]
+        )
+        await expect(self.sut.itemUpdates.value).toEventually(equal(expectedValue))
+        
+    }
 }
 
 // MARK: - Spies -
 
-private class FetchCollectionServiceFakeSuccessSpy: FetchCollectionServiceType {
+private class FetchCollectionServiceFakeSpy: FetchCollectionServiceType {
  
-    var loadResponse: [Feature_OverviewScreen.CollectionResponse.ArtObject]
-    init(loadResponse: [Feature_OverviewScreen.CollectionResponse.ArtObject]) {
+    /// If this is nil then `load()` will throw an error.
+    var loadResponse: [Feature_OverviewScreen.CollectionResponse.ArtObject]?
+    init(loadResponse: [Feature_OverviewScreen.CollectionResponse.ArtObject]?) {
         self.loadResponse = loadResponse
     }
     
@@ -163,6 +221,9 @@ private class FetchCollectionServiceFakeSuccessSpy: FetchCollectionServiceType {
         invokedLoadCount += 1
         invokedLoadParameters = (query, page)
         
+        guard let loadResponse = loadResponse else {
+            throw Transport.Error.couldNotCreateRequest // for example
+        }
         return loadResponse
     }
 }

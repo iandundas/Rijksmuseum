@@ -50,6 +50,7 @@ public final class DetailViewModel {
     }
     
     private func handleNetworkResponse(networkObject: CollectionDetailResponse.ArtObject) {
+        errorAlerts.send(nil)
         
         var rows = [DetailRow]()
         rows += [.init(title: NSLocalizedString("Object Number", comment: ""), value: networkObject.objectNumber, allowsSearch: false)]

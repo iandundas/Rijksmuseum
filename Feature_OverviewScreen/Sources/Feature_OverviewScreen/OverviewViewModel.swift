@@ -64,6 +64,8 @@ public final class OverviewViewModel {
     }
     
     private func handleNetworkResponse(networkObjects: [CollectionResponse.ArtObject], forPage page: Int) {
+        errorAlerts.send(nil)
+        
         let objects = networkObjects.compactMap(CollectionItem.init)
         
         // If it's the first page of data loaded, overwrite existing data. Otherwise append it.
