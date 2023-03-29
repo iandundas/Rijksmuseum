@@ -18,6 +18,7 @@ let package = Package(
         .package(name: "Shared", path: "../Shared"),
         .package(name: "TransportCore", path: "../TransportCore"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
+        .package(url: "https://github.com/Quick/Nimble", from: "11.2.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -31,6 +32,9 @@ let package = Package(
             ]),
         .testTarget(
             name: "Feature_OverviewScreenTests",
-            dependencies: ["Feature_OverviewScreen"]),
+            dependencies: [
+                "Feature_OverviewScreen",
+                .product(name: "Nimble", package: "Nimble")
+            ]),
     ]
 )
