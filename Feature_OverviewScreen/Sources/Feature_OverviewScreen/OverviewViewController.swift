@@ -115,6 +115,7 @@ public final class OverviewViewController: UIViewController {
     
     private func append(item: CollectionItem, to snapshot: inout NSDiffableDataSourceSnapshot<Section, CollectionItem>) {
         
+        /// If the current section does not exist, insert one into the snapshot:
         if snapshot.indexOfSection(item.section) == nil {
             snapshot.appendSections([item.section])
         }

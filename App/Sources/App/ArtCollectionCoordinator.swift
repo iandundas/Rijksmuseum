@@ -21,7 +21,7 @@ public class ArtCollectionCoordinator: Coordinator {
 
     public func start() {
         
-        // query passed here allows a future potential deeplinking feature.
+        // `query` passed here allows a future potential deeplinking feature. It's also used on line 66.
         pushOverviewScreen(query: nil, animated: false)
     }
     

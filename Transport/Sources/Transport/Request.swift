@@ -8,6 +8,7 @@
 import Foundation
 
 /// Response is a "Phantom" type, i.e a generic type associated with - but not used by - this Type.
+/// A barebones struct to represent a HTTP request.
 public struct Request<Response> {
     public let method: HttpMethod
     public let url: URL
@@ -21,6 +22,7 @@ public struct Request<Response> {
 
 extension Request {
     
+    /// Convert my abstract `Request` into an actual `URLRequest`
     internal var urlRequest: URLRequest? {
         var request = URLRequest(url: url)
         
@@ -29,6 +31,7 @@ extension Request {
             request.httpBody = data
             
         case let .get(queryItems):
+            // Combine the URL and the queryItems to produce a new URL with query parameters:
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             components?.queryItems = queryItems
             
@@ -47,10 +50,10 @@ extension Request {
 
 extension URLSession {
     
-    public func resolveJSONEncodedValue<Value: Decodable>(from request: Request<Value>)
-        async throws -> Value {
+    /// Resolve the request into a decoded response using async/await: 
+    public func resolveJSONEncodedValue<Value: Decodable>(from request: Request<Value>) async throws -> Value {
             
-        let decoded = Task.detached(priority: .userInitiated) {
+        let decoded = Task.detached(priority: .userInitiated) { // i.e. not on Main thread
             
             guard let urlRequest = request.urlRequest else {
                 throw Error.couldNotCreateRequest

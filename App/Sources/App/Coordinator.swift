@@ -15,6 +15,8 @@ public protocol Coordinator {
     func start()
 }
 
+/// `NavigationControllerProtocol` would allow the Coordinators to be tested. One for the future..
+///
 public protocol NavigationControllerProtocol: NSObject {
     func pushViewController(_: UIViewController, animated: Bool)
 
