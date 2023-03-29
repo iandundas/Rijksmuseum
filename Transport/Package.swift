@@ -24,9 +24,6 @@ let package = Package(
             name: "Transport",
             dependencies: [
                 .product(name: "Shared", package: "Shared"),
-            ]),
-        .testTarget(
-            name: "TransportTests",
-            dependencies: ["Transport"]),
+            ])
     ]
 )
