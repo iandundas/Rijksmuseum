@@ -16,11 +16,16 @@ public protocol DetailViewModelDelegate: AnyObject {
 }
 
 public final class DetailViewModel {
-
+    
+    enum ErrorAlert {
+        case networkError(title: String, message: String, retryAction: () -> Void)
+    }
+    
     public weak var delegate: DetailViewModelDelegate?
     
     let items = CurrentValueSubject<[DetailRow]?, Never>(nil)
-    
+    let errorAlerts = CurrentValueSubject<ErrorAlert?, Never>(nil) // TODO: model as a PassthroughSubject instead, as it's an event rather than a static value.
+
     private var networkTask: Task<Void, Never>?
     private var fetchCollectionDetailsService: FetchCollectionDetailsService
     
@@ -39,8 +44,7 @@ public final class DetailViewModel {
                 self.handleNetworkResponse(networkObject: networkObject)
             }
             catch let error {
-                // TODO: handle error
-                print("Network Error:", error.localizedDescription)
+                self.handleNetworkError(error: error)
             }
         }
     }
@@ -71,6 +75,18 @@ public final class DetailViewModel {
         }
         
         items.value = rows
+    }
+    
+    private func handleNetworkError(error: Swift.Error) {
+        errorAlerts.send(ErrorAlert.networkError(
+            title: NSLocalizedString("Error", comment: "Error dialog title"),
+            message: error.localizedDescription,
+            retryAction: { [weak self] in
+                guard let self else { return }
+                print("Retrying load")
+                self.load()
+            }
+        ))
     }
     
     func userTappedRow(data: DetailRow) {

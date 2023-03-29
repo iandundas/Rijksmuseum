@@ -68,6 +68,7 @@ public final class OverviewViewController: UIViewController {
 
     fileprivate let viewModel: OverviewViewModel
     private var lastLoadedCancellable: AnyCancellable? // holds a reference to the `viewModel.itemUpdates` cancellable
+    private var errorAlertsCancellable: AnyCancellable? // holds a reference to the `viewModel.errorAlerts` cancellable
     
     public init(viewModel: OverviewViewModel) {
         self.viewModel = viewModel
@@ -105,6 +106,13 @@ public final class OverviewViewController: UIViewController {
                 
                 self.datasource.apply(snapshot)
             }
+        
+        errorAlertsCancellable = viewModel.errorAlerts
+            .compactMap { $0 } // TODO: - dismiss any presented alert if this becomes nil
+            .sink { [weak self] errorAlert in
+                guard let self else { return }
+                self.presentAlert(alertInfo: errorAlert)
+            }
     }
     
     private func append(item: CollectionItem, to snapshot: inout NSDiffableDataSourceSnapshot<Section, CollectionItem>) {
@@ -136,6 +144,23 @@ public final class OverviewViewController: UIViewController {
         searchController.searchBar.placeholder = NSLocalizedString("Search", comment: "Search bar text placeholder")
         navigationItem.searchController = searchController
         definesPresentationContext = true
+    }
+    
+    // TODO: it's arguable that the Coordinator should be presenting this, but running out of time..
+    private func presentAlert(alertInfo: OverviewViewModel.ErrorAlert) {
+        switch alertInfo {
+        case let .networkError(title, message, retry):
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            let retryAction = UIAlertAction(title: NSLocalizedString("Retry", comment: "Error alert retry button"), style: .default) { _ in
+                retry()
+            }
+            let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Error alert cancel button"), style: .cancel)
+            alertController.addAction(retryAction)
+            alertController.addAction(cancelAction)
+            alertController.preferredAction = retryAction
+            self.present(alertController, animated: true)
+        }
     }
 }
 

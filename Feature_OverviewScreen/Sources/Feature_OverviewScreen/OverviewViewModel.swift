@@ -23,10 +23,15 @@ public final class OverviewViewModel {
         case append     // this change should be appended to the last change.
     }
     
+    enum ErrorAlert {
+        case networkError(title: String, message: String, retryAction: () -> Void)
+    }
+    
     public weak var delegate: OverviewViewModelDelegate?
     
-    let itemUpdates = CurrentValueSubject<(StateChangeMode, [CollectionItem])?, Never>(nil)
     let title: String
+    let itemUpdates = CurrentValueSubject<(StateChangeMode, [CollectionItem])?, Never>(nil)
+    let errorAlerts = CurrentValueSubject<ErrorAlert?, Never>(nil) // TODO: model as a PassthroughSubject instead, as it's an event rather than a static value.
 
     private var nextPageToLoad: Int?
     private var queryText: String?
@@ -38,7 +43,7 @@ public final class OverviewViewModel {
         self.title = initialQuery ?? NSLocalizedString("Rijksmuseum Collection", comment: "Overview Title")
         self.fetchCollectionService = fetchCollectionService
         self.nextPageToLoad = 1
-        
+
         load()
     }
     
@@ -53,8 +58,7 @@ public final class OverviewViewModel {
                 self.handleNetworkResponse(networkObjects: networkObjects, forPage: nextPageToLoad)
             }
             catch let error {
-                // TODO: handle error
-                print("Network Error:", error.localizedDescription)
+                self.handleNetworkError(error: error)
             }
         }
     }
@@ -68,6 +72,18 @@ public final class OverviewViewModel {
         
         // Increment next page counter:
         self.nextPageToLoad = objects.isEmpty ? nil : page + 1
+    }
+    
+    private func handleNetworkError(error: Swift.Error) {
+        errorAlerts.send(ErrorAlert.networkError(
+            title: NSLocalizedString("Error", comment: "Error dialog title"),
+            message: error.localizedDescription,
+            retryAction: { [weak self] in
+                guard let self else { return }
+                print("retrying loading query \(String(describing: self.queryText)) at page \(String(describing: self.nextPageToLoad))")
+                self.load()
+            }
+        ))
     }
     
     func userViewedTheLastCell() {

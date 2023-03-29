@@ -63,6 +63,7 @@ public final class DetailViewController: UIViewController {
     }()
 
     fileprivate let viewModel: DetailViewModel
+    private var errorAlertsCancellable: AnyCancellable? // holds a reference to the `viewModel.errorAlerts` cancellable
     
     public init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
@@ -95,6 +96,13 @@ public final class DetailViewController: UIViewController {
 
             self.datasource.apply(snapshot)
         }
+        
+        errorAlertsCancellable = viewModel.errorAlerts
+            .compactMap { $0 } // TODO: - dismiss any presented alert if this becomes nil
+            .sink { [weak self] errorAlert in
+                guard let self else { return }
+                self.presentAlert(alertInfo: errorAlert)
+            }
     }
     
     private func setupCollectionView() {
@@ -102,5 +110,28 @@ public final class DetailViewController: UIViewController {
         collectionView.constrainToEdges(ofContainingView: view)
 
         collectionView.dataSource = datasource
+    }
+    
+    // TODO: it's arguable that the Coordinator should be presenting this, but running out of time..
+    private func presentAlert(alertInfo: DetailViewModel.ErrorAlert) {
+        switch alertInfo {
+        case let .networkError(title, message, retry):
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            let retryAction = UIAlertAction(title: NSLocalizedString("Retry", comment: "Error alert retry button"), style: .default) { _ in
+                retry()
+            }
+            let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Error alert cancel button"), style: .cancel) { [weak self] _ in
+                guard let self else { return }
+                
+                // TODO: the Coordinator should also handle this instead of handling in the VC:
+                // Adding here anyway to make the error UX a little nicer in the demo. Tap cancel and pop back.
+                self.navigationController?.popViewController(animated: true)
+            }
+            alertController.addAction(retryAction)
+            alertController.addAction(cancelAction)
+            alertController.preferredAction = retryAction
+            self.present(alertController, animated: true)
+        }
     }
 }
