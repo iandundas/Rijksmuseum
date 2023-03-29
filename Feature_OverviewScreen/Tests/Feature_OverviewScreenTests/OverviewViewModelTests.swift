@@ -27,6 +27,7 @@ final class OverviewViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.title) == "Rijksmuseum Collection"
         expect(self.sut.itemUpdates.value).to(beNil()) // starts as nil
+        expect(self.sut.isLoading.value).to(beTrue())
         
         // Check call to network was correct:
         await expect(successNetworkService.invokedLoadCount).toEventually(equal(1))
@@ -37,6 +38,9 @@ final class OverviewViewModelTests: XCTestCase {
             .overwrite, [CollectionItem.from(artObject: .stub1)]
         )
         await expect(self.sut.itemUpdates.value).toEventually(equal(expectedValue))
+        
+        // Loading should have stopped:
+        expect(self.sut.isLoading.value).to(beFalse())
     }
     
     func test_initialLoadWithGivenQuery() async {
@@ -166,6 +170,9 @@ final class OverviewViewModelTests: XCTestCase {
         
         expect(title) == "Error"
         expect(message) == "Could not create a request to send to the network"
+        
+        // Loading should have stopped:
+        expect(self.sut.isLoading.value).to(beFalse())
     }
     
     func test_retryAfterNetworkError() async throws {
@@ -191,6 +198,8 @@ final class OverviewViewModelTests: XCTestCase {
         retryHandler()
 
         // Assert
+        expect(self.sut.isLoading.value).to(beTrue())
+        
         // wait for the load to complete
         await expect(networkService.invokedLoadCount).toEventually(equal(2)) // second attempt
         await expect(networkService.invokedLoadParameters).toEventually(equal((query, 1))) // loading first page
@@ -201,6 +210,8 @@ final class OverviewViewModelTests: XCTestCase {
         )
         await expect(self.sut.itemUpdates.value).toEventually(equal(expectedValue))
         
+        // Loading should have stopped:
+        expect(self.sut.isLoading.value).to(beFalse()) 
     }
 }
 

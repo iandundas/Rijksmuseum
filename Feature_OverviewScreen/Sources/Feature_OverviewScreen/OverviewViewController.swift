@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Shared
 
 public final class OverviewViewController: UIViewController {
     
@@ -27,17 +28,6 @@ public final class OverviewViewController: UIViewController {
     }()
     
     fileprivate let searchController = UISearchController(searchResultsController: nil)
-    
-//    fileprivate let loadingView: UIView = {
-//        let view = UIView()
-//
-//        let spinner = UIActivityIndicatorView(style: .large)
-//        spinner.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(spinner)
-//        spinner.centerWithin(containingView: view)
-//
-//        return view
-//    }()
     
     fileprivate func makeCellRegistration() -> CellRegistration {
         CellRegistration { cell, indexPath, item in
@@ -67,8 +57,10 @@ public final class OverviewViewController: UIViewController {
     }()
 
     fileprivate let viewModel: OverviewViewModel
+    
     private var lastLoadedCancellable: AnyCancellable? // holds a reference to the `viewModel.itemUpdates` cancellable
     private var errorAlertsCancellable: AnyCancellable? // holds a reference to the `viewModel.errorAlerts` cancellable
+    private var isLoadingCancellable: AnyCancellable? // holds a reference to the `viewModel.isLoading` cancellable
     
     public init(viewModel: OverviewViewModel) {
         self.viewModel = viewModel
@@ -113,6 +105,12 @@ public final class OverviewViewController: UIViewController {
                 guard let self else { return }
                 self.presentAlert(alertInfo: errorAlert)
             }
+        
+        isLoadingCancellable = viewModel.isLoading
+            .sink(receiveValue: { [weak self] isLoading in
+                guard let self else { return }
+                self.navigationItem.rightBarButtonItem = isLoading ? ActivityIndicatorBarButtonItem() : nil
+            })
     }
     
     private func append(item: CollectionItem, to snapshot: inout NSDiffableDataSourceSnapshot<Section, CollectionItem>) {

@@ -32,6 +32,7 @@ public final class OverviewViewModel {
     let title: String
     let itemUpdates = CurrentValueSubject<(StateChangeMode, [CollectionItem])?, Never>(nil)
     let errorAlerts = CurrentValueSubject<ErrorAlert?, Never>(nil) // TODO: model as a PassthroughSubject instead, as it's an event rather than a static value.
+    let isLoading = CurrentValueSubject<Bool, Never>(false)
 
     private var nextPageToLoad: Int?
     private var queryText: String?
@@ -52,13 +53,19 @@ public final class OverviewViewModel {
         
         networkTask?.cancel()
         
+        isLoading.value = true
+        
         networkTask = Task {
             do {
                 let networkObjects = try await fetchCollectionService.load(query: queryText, page: nextPageToLoad)
                 self.handleNetworkResponse(networkObjects: networkObjects, forPage: nextPageToLoad)
+                
+                self.isLoading.value = false
             }
             catch let error {
                 self.handleNetworkError(error: error)
+                
+                self.isLoading.value = false
             }
         }
     }
