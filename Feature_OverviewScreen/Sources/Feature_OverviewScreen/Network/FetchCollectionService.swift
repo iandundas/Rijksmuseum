@@ -8,7 +8,11 @@
 import TransportCore
 import Foundation
 
-public class FetchCollectionService {
+public protocol FetchCollectionServiceType {
+    func load(query: String?, page: Int) async throws -> [CollectionResponse.ArtObject]
+}
+
+public class FetchCollectionService: FetchCollectionServiceType {
     
     private let apiKey: String
     private let baseURL: URL
@@ -18,7 +22,7 @@ public class FetchCollectionService {
         self.baseURL = baseURL
     }
     
-    func load(query: String?, page: Int) async throws -> [CollectionResponse.ArtObject] {
+    public func load(query: String?, page: Int) async throws -> [CollectionResponse.ArtObject] {
         
         let request = TransportCore.Request<CollectionResponse>
             .search(query: query, apiKey: apiKey, baseURL: baseURL, page: page)

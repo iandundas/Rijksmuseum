@@ -12,7 +12,7 @@ import Shared
  
 public protocol OverviewViewModelDelegate: AnyObject {
     
-    func userWantsMoreInfoOn(objectNumber: String) // TODO: objectNumber would be better as its own Type
+    func userWantsMoreInfoOn(objectNumber: String) // TODO: `objectNumber` would be better as its own Type instead of `String`
 }
 
 @MainActor
@@ -27,16 +27,14 @@ public final class OverviewViewModel {
     
     let itemUpdates = CurrentValueSubject<(StateChangeMode, [CollectionItem])?, Never>(nil)
     let title: String
-    let initialSearchBarText: String?
 
     private var nextPageToLoad: Int?
     private var queryText: String?
     private var networkTask: Task<Void, Never>?
-    private let fetchCollectionService: FetchCollectionService
+    private let fetchCollectionService: FetchCollectionServiceType
     
-    public init(initialQuery: String?, fetchCollectionService: FetchCollectionService) {
+    public init(initialQuery: String?, fetchCollectionService: FetchCollectionServiceType) {
         self.queryText = initialQuery
-        self.initialSearchBarText = initialQuery
         self.title = initialQuery ?? NSLocalizedString("Rijksmuseum Collection", comment: "Overview Title")
         self.fetchCollectionService = fetchCollectionService
         self.nextPageToLoad = 1

@@ -7,11 +7,11 @@
 
 import Foundation
 
-internal struct CollectionResponse: Codable {
+public struct CollectionResponse: Codable {
     let count: Int
     let artObjects: [ArtObject]
     
-    struct ArtObject: Codable {
+    public struct ArtObject: Codable {
         let id: String
         let objectNumber: String
         let title: String?
