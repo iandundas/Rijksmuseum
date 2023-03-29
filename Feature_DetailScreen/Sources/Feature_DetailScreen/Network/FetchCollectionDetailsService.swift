@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import TransportCore
+import Transport
 
 public class FetchCollectionDetailsService {
     
@@ -22,7 +22,7 @@ public class FetchCollectionDetailsService {
     
     func load() async throws -> CollectionDetailResponse.ArtObject {
         
-        let request = TransportCore.Request<CollectionDetailResponse>
+        let request = Transport.Request<CollectionDetailResponse>
             .fetch(objectNumber: objectNumber, apiKey: apiKey, baseURL: baseURL)
         
         let result = try await URLSession.shared
@@ -32,7 +32,7 @@ public class FetchCollectionDetailsService {
     }
 }
 
-private extension TransportCore.Request where Response == CollectionDetailResponse {
+private extension Transport.Request where Response == CollectionDetailResponse {
     
     /// e.g. `GET https://www.rijksmuseum.nl/api/nl/collection/BI-1950-17-160`
     static func fetch(objectNumber: String, apiKey: String, baseURL: URL) -> Self {

@@ -16,7 +16,7 @@
 		3C67A60D29D2132F00DC5B62 /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 3C67A60C29D2132F00DC5B62 /* App */; };
 		3C67A60F29D2132F00DC5B62 /* Feature_DetailScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3C67A60E29D2132F00DC5B62 /* Feature_DetailScreen */; };
 		3C67A61129D2132F00DC5B62 /* Feature_OverviewScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3C67A61029D2132F00DC5B62 /* Feature_OverviewScreen */; };
-		3CFF0B5829D1C5A100AA7F37 /* TransportCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3CFF0B5729D1C5A100AA7F37 /* TransportCore */; };
+		3CFF0B5829D1C5A100AA7F37 /* Transport in Frameworks */ = {isa = PBXBuildFile; productRef = 3CFF0B5729D1C5A100AA7F37 /* Transport */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,7 @@
 		3C5E2FD329CDF60500E46127 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Shared; sourceTree = SOURCE_ROOT; };
 		3C5E2FD929CDFB7D00E46127 /* Feature_DetailScreen */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature_DetailScreen; sourceTree = "<group>"; };
 		3C5E2FDA29CDFBE700E46127 /* App */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = App; sourceTree = "<group>"; };
-		3CFF0B5529D1C37500AA7F37 /* TransportCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransportCore; sourceTree = "<group>"; };
+		3CFF0B5529D1C37500AA7F37 /* Transport */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transport; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +54,7 @@
 				3C67A60F29D2132F00DC5B62 /* Feature_DetailScreen in Frameworks */,
 				3C67A61129D2132F00DC5B62 /* Feature_OverviewScreen in Frameworks */,
 				3C5E2FD629CDF63E00E46127 /* Shared in Frameworks */,
-				3CFF0B5829D1C5A100AA7F37 /* TransportCore in Frameworks */,
+				3CFF0B5829D1C5A100AA7F37 /* Transport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,7 +75,7 @@
 				3C5E2FD929CDFB7D00E46127 /* Feature_DetailScreen */,
 				3C5A20B729CE016E00D7D0B8 /* Feature_OverviewScreen */,
 				3C5E2FD329CDF60500E46127 /* Shared */,
-				3CFF0B5529D1C37500AA7F37 /* TransportCore */,
+				3CFF0B5529D1C37500AA7F37 /* Transport */,
 				3C5E2FD429CDF63E00E46127 /* Frameworks */,
 				3C5E2F9F29CDF0F000E46127 /* Products */,
 				3C5E2FA029CDF0F000E46127 /* Rijksmuseum */,
@@ -142,7 +142,7 @@
 			name = Rijksmuseum;
 			packageProductDependencies = (
 				3C5E2FD529CDF63E00E46127 /* Shared */,
-				3CFF0B5729D1C5A100AA7F37 /* TransportCore */,
+				3CFF0B5729D1C5A100AA7F37 /* Transport */,
 				3C67A60C29D2132F00DC5B62 /* App */,
 				3C67A60E29D2132F00DC5B62 /* Feature_DetailScreen */,
 				3C67A61029D2132F00DC5B62 /* Feature_OverviewScreen */,
@@ -271,7 +271,7 @@
 		};
 		3C67A61B29D2133E00DC5B62 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 3C67A61A29D2133E00DC5B62 /* TransportCore */;
+			productRef = 3C67A61A29D2133E00DC5B62 /* Transport */;
 		};
 /* End PBXTargetDependency section */
 
@@ -562,13 +562,13 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};
-		3C67A61A29D2133E00DC5B62 /* TransportCore */ = {
+		3C67A61A29D2133E00DC5B62 /* Transport */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = TransportCore;
+			productName = Transport;
 		};
-		3CFF0B5729D1C5A100AA7F37 /* TransportCore */ = {
+		3CFF0B5729D1C5A100AA7F37 /* Transport */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = TransportCore;
+			productName = Transport;
 		};
 		3CFF0B5929D1C5A100AA7F37 /* TransportServices */ = {
 			isa = XCSwiftPackageProductDependency;

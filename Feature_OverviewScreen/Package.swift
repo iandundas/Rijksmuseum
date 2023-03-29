@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Shared", path: "../Shared"),
-        .package(name: "TransportCore", path: "../TransportCore"),
+        .package(name: "Transport", path: "../Transport"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
         .package(url: "https://github.com/Quick/Nimble", from: "11.2.0"),
     ],
@@ -26,7 +26,7 @@ let package = Package(
         .target(
             name: "Feature_OverviewScreen",
             dependencies: [
-                .product(name: "TransportCore", package: "TransportCore"),
+                .product(name: "Transport", package: "Transport"),
                 .product(name: "Shared", package: "Shared"),
                 .product(name: "Kingfisher", package: "Kingfisher"),
             ]),

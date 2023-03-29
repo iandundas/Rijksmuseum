@@ -56,10 +56,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "TransportCoreTests"
-               BuildableName = "TransportCoreTests"
-               BlueprintName = "TransportCoreTests"
-               ReferencedContainer = "container:TransportCore">
+               BlueprintIdentifier = "TransportTests"
+               BuildableName = "TransportTests"
+               BlueprintName = "TransportTests"
+               ReferencedContainer = "container:Transport">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

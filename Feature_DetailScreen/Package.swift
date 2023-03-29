@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Shared", path: "../Shared"),
-        .package(name: "TransportCore", path: "../TransportCore"),
+        .package(name: "Transport", path: "../Transport"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -24,7 +24,7 @@ let package = Package(
         .target(
             name: "Feature_DetailScreen",
             dependencies: [
-                .product(name: "TransportCore", package: "TransportCore"),
+                .product(name: "Transport", package: "Transport"),
                 .product(name: "Shared", package: "Shared"),
             ]),
         .testTarget(

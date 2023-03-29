@@ -5,7 +5,7 @@
 //  Created by Ian Dundas on 28/03/2023.
 //
 
-import TransportCore
+import Transport
 import Foundation
 
 public protocol FetchCollectionServiceType {
@@ -24,7 +24,7 @@ public class FetchCollectionService: FetchCollectionServiceType {
     
     public func load(query: String?, page: Int) async throws -> [CollectionResponse.ArtObject] {
         
-        let request = TransportCore.Request<CollectionResponse>
+        let request = Transport.Request<CollectionResponse>
             .search(query: query, apiKey: apiKey, baseURL: baseURL, page: page)
         
         let result = try await URLSession.shared
@@ -34,7 +34,7 @@ public class FetchCollectionService: FetchCollectionServiceType {
     }
 }
 
-private extension TransportCore.Request where Response == CollectionResponse {
+private extension Transport.Request where Response == CollectionResponse {
     
     /// e.g. `GET https://www.rijksmuseum.nl/api/nl/collection?key=0fiuZFh4&q=Vermeer&imgonly=true&p=0&ps=10&s=artist`
     static func search(query: String?, apiKey: String, baseURL: URL, page: Int = 1, resultsPerPage: Int = 20) -> Self {

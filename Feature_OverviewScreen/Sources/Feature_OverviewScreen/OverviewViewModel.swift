@@ -7,7 +7,7 @@
 
 import UIKit
 import Combine
-import TransportCore
+import Transport
 import Shared
  
 public protocol OverviewViewModelDelegate: AnyObject {

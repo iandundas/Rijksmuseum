@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import TransportCore
+import Transport
 import Combine
 import Shared
 
