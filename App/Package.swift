@@ -29,8 +29,5 @@ let package = Package(
                 .product(name: "Feature_OverviewScreen", package: "Feature_OverviewScreen"),
                 .product(name: "Feature_DetailScreen", package: "Feature_DetailScreen"),
             ]),
-        .testTarget(
-            name: "AppTests",
-            dependencies: ["App"]),
     ]
 )
