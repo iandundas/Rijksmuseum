@@ -20,6 +20,76 @@
                ReferencedContainer = "container:Rijksmuseum.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SharedTests"
+               BuildableName = "SharedTests"
+               BlueprintName = "SharedTests"
+               ReferencedContainer = "container:Shared">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Feature_OverviewScreenTests"
+               BuildableName = "Feature_OverviewScreenTests"
+               BlueprintName = "Feature_OverviewScreenTests"
+               ReferencedContainer = "container:Feature_OverviewScreen">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "TransportCoreTests"
+               BuildableName = "TransportCoreTests"
+               BlueprintName = "TransportCoreTests"
+               ReferencedContainer = "container:TransportCore">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AppTests"
+               BuildableName = "AppTests"
+               BlueprintName = "AppTests"
+               ReferencedContainer = "container:App">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Feature_DetailScreenTests"
+               BuildableName = "Feature_DetailScreenTests"
+               BlueprintName = "Feature_DetailScreenTests"
+               ReferencedContainer = "container:Feature_DetailScreen">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -37,6 +107,26 @@
                BuildableName = "RijksmuseumTests.xctest"
                BlueprintName = "RijksmuseumTests"
                ReferencedContainer = "container:Rijksmuseum.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AppTests"
+               BuildableName = "AppTests"
+               BlueprintName = "AppTests"
+               ReferencedContainer = "container:App">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Feature_OverviewScreenTests"
+               BuildableName = "Feature_OverviewScreenTests"
+               BlueprintName = "Feature_OverviewScreenTests"
+               ReferencedContainer = "container:Feature_OverviewScreen">
             </BuildableReference>
          </TestableReference>
       </Testables>
